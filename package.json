@@ -1,5 +1,5 @@
 {
-  "name": "@vvitto/react-dnd-html5-backend-chrome-dnd-hack",
+  "name": "@vvitto/html5-backend-chrome-dnd-fix",
   "version": "2.2.0",
   "description": "HTML5 backend for React DnD",
   "main": "lib/index.js",
@@ -51,7 +51,6 @@
     "react-dnd": "^2.2.0"
   },
   "directories": {
-    "lib": "lib",
     "test": "test"
   }
 }
