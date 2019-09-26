@@ -6,6 +6,14 @@ import { getNodeClientOffset, getEventClientOffset, getDragPreviewOffset } from 
 import { createNativeDragSource, matchNativeItemType } from './NativeDragSources';
 import * as NativeTypes from './NativeTypes';
 
+const isChrome = navigator.userAgent.indexOf('Chrome') !== -1;
+const isWindows = navigator.userAgent.indexOf('Windows') !== -1;
+const isInIframe = window.location !== window.parent.location;
+
+const shouldUseWindowDelayHack = isChrome && isWindows && isInIframe;
+
+const TIMEOUT_LENGTH_FOR_DELAY_DRAG_END_HACK = 50;
+
 export default class HTML5Backend {
   constructor(manager) {
     this.actions = manager.getActions();
@@ -353,7 +361,15 @@ export default class HTML5Backend {
     }
   }
 
-  handleTopDragEndCapture() {
+  handleTopDragEndCapture(event, wasDelayedViaHack) {
+    if (shouldUseWindowDelayHack && !wasDelayedViaHack) {
+      setTimeout(
+        () => this.handleTopDragEndCapture(event, true),
+        TIMEOUT_LENGTH_FOR_DELAY_DRAG_END_HACK);
+
+      return;
+    }
+
     if (this.clearCurrentDragSourceNode()) {
       // Firefox can dispatch this event in an infinite loop
       // if dragend handler does something like showing an alert.
