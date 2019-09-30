@@ -1,14 +1,14 @@
 import * as NativeTypes from './NativeTypes';
 
 function getDataFromDataTransfer(dataTransfer, typesToTry, defaultValue) {
-  const result = typesToTry.reduce((resultSoFar, typeToTry) =>
-    resultSoFar || dataTransfer.getData(typeToTry),
+  const result = typesToTry.reduce(
+    (resultSoFar, typeToTry) => resultSoFar || dataTransfer.getData(typeToTry),
     null,
   );
 
-  return (result != null) ? // eslint-disable-line eqeqeq
-    result :
-    defaultValue;
+  return result != null // eslint-disable-line eqeqeq
+    ? result
+    : defaultValue;
 }
 
 const nativeTypesConfig = {
@@ -32,17 +32,14 @@ const nativeTypesConfig = {
 };
 
 export function createNativeDragSource(type) {
-  const {
-    exposeProperty,
-    matchesTypes,
-    getData,
-  } = nativeTypesConfig[type];
+  const { exposeProperty, matchesTypes, getData } = nativeTypesConfig[type];
 
   return class NativeDragSource {
     constructor() {
       this.item = {
         get [exposeProperty]() {
-          console.warn( // eslint-disable-line no-console
+          // eslint-disable-next-line no-console
+          console.warn(
             `Browser doesn't allow reading "${exposeProperty}" until the drop event.`,
           );
           return null;
@@ -67,15 +64,19 @@ export function createNativeDragSource(type) {
       return handle === monitor.getSourceId();
     }
 
-    endDrag() { }
+    endDrag() {}
   };
 }
 
 export function matchNativeItemType(dataTransfer) {
-  const dataTransferTypes = Array.prototype.slice.call(dataTransfer.types || []);
+  const dataTransferTypes = Array.prototype.slice.call(
+    dataTransfer.types || [],
+  );
 
-  return Object.keys(nativeTypesConfig).filter((nativeItemType) => {
-    const { matchesTypes } = nativeTypesConfig[nativeItemType];
-    return matchesTypes.some(t => dataTransferTypes.indexOf(t) > -1);
-  })[0] || null;
+  return (
+    Object.keys(nativeTypesConfig).filter((nativeItemType) => {
+      const { matchesTypes } = nativeTypesConfig[nativeItemType];
+      return matchesTypes.some(t => dataTransferTypes.indexOf(t) > -1);
+    })[0] || null
+  );
 }

@@ -11,7 +11,7 @@ export default class MonotonicInterpolant {
     for (let i = 0; i < length; i++) {
       indexes.push(i);
     }
-    indexes.sort((a, b) => xs[a] < xs[b] ? -1 : 1);
+    indexes.sort((a, b) => (xs[a] < xs[b] ? -1 : 1));
 
     // Get consecutive differences and slopes
     const dys = [];
@@ -38,7 +38,9 @@ export default class MonotonicInterpolant {
         dx = dxs[i];
         const dxNext = dxs[i + 1];
         const common = dx + dxNext;
-        c1s.push(3 * common / ((common + dxNext) / m + (common + dx) / mNext));
+        c1s.push(
+          (3 * common) / ((common + dxNext) / m + (common + dx) / mNext),
+        );
       }
     }
     c1s.push(ms[ms.length - 1]);
