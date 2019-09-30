@@ -1,6 +1,6 @@
 {
   "name": "@vvitto/html5-backend-chrome-dnd-fix",
-  "version": "2.2.0",
+  "version": "2.5.4",
   "description": "HTML5 backend for React DnD",
   "main": "lib/index.js",
   "scripts": {
